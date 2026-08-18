@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import cors from 'cors';
 import db from './config/database.js'; // Tu puente a la base de dato
 import Equipment from './models/Equipment.js'; // Tu nuevo modelo (el molde)
+import equipmentRoutes from './routes/equipment.routes.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -13,7 +14,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-
+app.use('/api/equipment', equipmentRoutes);
 // Tu ruta de prueba
 app.get('/', (req: Request, res: Response) => {
   res.send('¡El servidor del Inventario está funcionando perfectamente!');

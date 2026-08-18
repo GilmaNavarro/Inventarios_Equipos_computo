@@ -24,7 +24,7 @@ export default function Formulario() {
     if (isEditing) {
       const fetchEquipment = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/equipment`);
+          const response = await axios.get(`http://localhost:4000/api/equipment`);
           // Buscamos el equipo específico (podrías hacer un endpoint GET /:id en el backend para ser más óptimo)
           const eq = response.data.find((e: any) => e.id === id);
           if (eq) {
@@ -58,10 +58,10 @@ export default function Formulario() {
     try {
       if (isEditing) {
         // Hacemos el PUT para actualizar
-        await axios.put(`http://localhost:3000/api/equipment/${id}`, formData);
+        await axios.put(`http://localhost:4000/api/equipment/${id}`, formData);
       } else {
         // Hacemos el POST para crear
-        await axios.post('http://localhost:3000/api/equipment', formData);
+        await axios.post('http://localhost:4000/api/equipment', formData);
       }
       
       // Si todo sale bien, lo regresamos al dashboard

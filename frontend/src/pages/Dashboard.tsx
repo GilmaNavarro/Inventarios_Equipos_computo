@@ -11,7 +11,7 @@ export default function Dashboard() {
 
   const fetchEquipments = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/equipment');
+      const response = await axios.get('http://localhost:4000/api/equipment');
       setEquipments(response.data);
       setLoading(false);
     } catch (err) {
@@ -29,7 +29,7 @@ export default function Dashboard() {
 
     try {
       // Hacemos el DELETE al backend
-      await axios.delete(`http://localhost:3000/api/equipment/${id}`);
+      await axios.delete(`http://localhost:4000/api/equipment/${id}`);
       // Actualizamos la tabla borrando el equipo de la lista visual
       setEquipments(equipments.filter((eq) => eq.id !== id));
     } catch (err) {

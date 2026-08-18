@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Formulario.css';
 
 export default function Formulario() {
   const navigate = useNavigate();
+  const { id } = useParams(); // Obtiene el ID si estamos en /editar/:id
+  const isEditing = !!id; // Verdadero si hay un ID
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -15,6 +18,30 @@ export default function Formulario() {
     serialNumber: '',
     status: 'Operativo'
   });
+
+  // Si estamos editando, traemos los datos actuales
+  useEffect(() => {
+    if (isEditing) {
+      const fetchEquipment = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/equipment`);
+          // Buscamos el equipo específico (podrías hacer un endpoint GET /:id en el backend para ser más óptimo)
+          const eq = response.data.find((e: any) => e.id === id);
+          if (eq) {
+            setFormData({
+              name: eq.name,
+              brand: eq.brand,
+              serialNumber: eq.serialNumber,
+              status: eq.status
+            });
+          }
+        } catch (err) {
+          setError('Error al cargar los datos del equipo.');
+        }
+      };
+      fetchEquipment();
+    }
+  }, [id, isEditing]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -29,8 +56,14 @@ export default function Formulario() {
     setError('');
 
     try {
-      // Hacemos el POST al backend con los datos del formulario
-      await axios.post('http://localhost:3000/api/equipment', formData);
+      if (isEditing) {
+        // Hacemos el PUT para actualizar
+        await axios.put(`http://localhost:3000/api/equipment/${id}`, formData);
+      } else {
+        // Hacemos el POST para crear
+        await axios.post('http://localhost:3000/api/equipment', formData);
+      }
+      
       // Si todo sale bien, lo regresamos al dashboard
       navigate('/');
     } catch (err) {
@@ -42,8 +75,10 @@ export default function Formulario() {
 
   return (
     <div className="form-container glass-panel">
-      <h2>Registrar Nuevo Equipo</h2>
-      <p className="subtitle">Llena los datos para agregar un equipo al inventario.</p>
+      <h2>{isEditing ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}</h2>
+      <p className="subtitle">
+        {isEditing ? 'Modifica los datos del equipo seleccionado.' : 'Llena los datos para agregar un equipo al inventario.'}
+      </p>
 
       {error && <div className="error-alert">{error}</div>}
 
@@ -108,7 +143,7 @@ export default function Formulario() {
             Cancelar
           </button>
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? 'Guardando...' : 'Guardar Equipo'}
+            {loading ? 'Guardando...' : (isEditing ? 'Actualizar Equipo' : 'Guardar Equipo')}
           </button>
         </div>
       </form>

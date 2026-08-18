@@ -10,6 +10,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="nuevo" element={<Formulario />} />
+          <Route path="editar/:id" element={<Formulario />} />
         </Route>
       </Routes>
     </BrowserRouter>

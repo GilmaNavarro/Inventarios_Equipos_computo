@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import type { Equipment } from '../types';
 import './Dashboard.css';
@@ -84,7 +85,10 @@ export default function Dashboard() {
                       {eq.status}
                     </span>
                   </td>
-                  <td>
+                  <td style={{ display: 'flex', gap: '8px' }}>
+                    <Link to={`/editar/${eq.id}`} className="btn-edit" title="Editar Equipo">
+                      ✏️
+                    </Link>
                     <button 
                       className="btn-delete"
                       onClick={() => handleDelete(eq.id)}

@@ -24,3 +24,39 @@ export const getEquipments = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al obtener los equipos', error });
   }
 };
+
+// Función para actualizar un equipo (PUT)
+export const updateEquipment = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const equipment = await Equipment.findByPk(id as string);
+
+    if (!equipment) {
+      res.status(404).json({ message: 'Equipo no encontrado' });
+      return;
+    }
+
+    await equipment.update(req.body);
+    res.json(equipment);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar el equipo', error });
+  }
+};
+
+// Función para eliminar un equipo (DELETE)
+export const deleteEquipment = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const equipment = await Equipment.findByPk(id as string);
+
+    if (!equipment) {
+      res.status(404).json({ message: 'Equipo no encontrado' });
+      return;
+    }
+
+    await equipment.destroy();
+    res.json({ message: 'Equipo eliminado correctamente' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al eliminar el equipo', error });
+  }
+};

@@ -1,12 +1,19 @@
 import { Router } from 'express';
-import { createEquipment, getEquipments } from '../controllers/equipment.controller.js';
+import {
+  createEquipment,
+  getEquipments,
+  updateEquipment,
+  deleteEquipment
+} from '../controllers/equipment.controller.js';
 
 const router = Router();
 
-// Ruta para crear un equipo (POST)
+// Rutas existentes
 router.post('/', createEquipment);
-
-// Ruta para obtener todos los equipos (GET)
 router.get('/', getEquipments);
+
+// Nuevas rutas para actualizar y eliminar (requieren el ID en la URL)
+router.put('/:id', updateEquipment);
+router.delete('/:id', deleteEquipment);
 
 export default router;

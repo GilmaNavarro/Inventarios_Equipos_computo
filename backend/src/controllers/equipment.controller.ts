@@ -25,6 +25,21 @@ export const getEquipments = async (req: Request, res: Response) => {
   }
 };
 
+// 3. Obtener un equipo específico por ID (GET)
+export const getEquipmentById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const equipment = await Equipment.findByPk(id as string);
+    if (!equipment) {
+      res.status(404).json({ message: 'Equipo no encontrado' });
+      return;
+    }
+    res.status(200).json(equipment);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener el equipo', error });
+  }
+};
+
 // Función para actualizar un equipo (PUT)
 export const updateEquipment = async (req: Request, res: Response) => {
   try {

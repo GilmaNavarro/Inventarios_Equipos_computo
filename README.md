@@ -58,3 +58,6 @@ El proyecto está completamente dockerizado. Para levantarlo en cualquier máqui
 
 ---
 *Desarrollado con ♥️ para la prueba técnica de Gestión de Inventarios.*
+
+## 🌟 Estado del Proyecto
+¡Todas las funcionalidades han sido completadas con éxito!

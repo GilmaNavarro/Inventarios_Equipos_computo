@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import type { Equipment } from '../types';
 import './Formulario.css';
 
 export default function Formulario() {
@@ -24,9 +25,9 @@ export default function Formulario() {
     if (isEditing) {
       const fetchEquipment = async () => {
         try {
-          const response = await axios.get(`http://localhost:4000/api/equipment`);
+          const response = await axios.get(`http://localhost:3000/api/equipment`);
           // Buscamos el equipo específico (podrías hacer un endpoint GET /:id en el backend para ser más óptimo)
-          const eq = response.data.find((e: any) => e.id === id);
+          const eq = response.data.find((e: Equipment) => e.id === id);
           if (eq) {
             setFormData({
               name: eq.name,
@@ -58,10 +59,10 @@ export default function Formulario() {
     try {
       if (isEditing) {
         // Hacemos el PUT para actualizar
-        await axios.put(`http://localhost:4000/api/equipment/${id}`, formData);
+        await axios.put(`http://localhost:3000/api/equipment/${id}`, formData);
       } else {
         // Hacemos el POST para crear
-        await axios.post('http://localhost:4000/api/equipment', formData);
+        await axios.post('http://localhost:3000/api/equipment', formData);
       }
       
       // Si todo sale bien, lo regresamos al dashboard

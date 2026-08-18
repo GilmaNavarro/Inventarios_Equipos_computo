@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Equipment } from '../types';
+import type { Equipment } from '../types';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -8,7 +8,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Esta función llama a tu Backend
   const fetchEquipments = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/equipment');
@@ -18,6 +17,23 @@ export default function Dashboard() {
       console.error(err);
       setError('No se pudieron cargar los equipos. Asegúrate de que el backend esté encendido.');
       setLoading(false);
+    }
+  };
+
+  // Función para eliminar un equipo
+  const handleDelete = async (id: string) => {
+    // Pedimos confirmación al usuario
+    const confirm = window.confirm('¿Estás seguro de que deseas eliminar este equipo?');
+    if (!confirm) return;
+
+    try {
+      // Hacemos el DELETE al backend
+      await axios.delete(`http://localhost:3000/api/equipment/${id}`);
+      // Actualizamos la tabla borrando el equipo de la lista visual
+      setEquipments(equipments.filter((eq) => eq.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert('Hubo un error al eliminar el equipo.');
     }
   };
 
@@ -49,6 +65,7 @@ export default function Dashboard() {
               <th>Marca</th>
               <th>Nº de Serie</th>
               <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -66,6 +83,15 @@ export default function Dashboard() {
                     <span className={`status-badge ${eq.status.toLowerCase().replace(' ', '-')}`}>
                       {eq.status}
                     </span>
+                  </td>
+                  <td>
+                    <button 
+                      className="btn-delete"
+                      onClick={() => handleDelete(eq.id)}
+                      title="Eliminar Equipo"
+                    >
+                      🗑️
+                    </button>
                   </td>
                 </tr>
               ))
